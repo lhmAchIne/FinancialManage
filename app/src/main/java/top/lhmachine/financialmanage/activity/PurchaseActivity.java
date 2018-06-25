@@ -25,7 +25,7 @@ public class PurchaseActivity extends AppCompatActivity {
 
     private String product_id;      //商品编号
     private int purchase_id;        //进货编号
-    private EditText input_num, input_purchase_price, input_sell_price; //输入控件
+    private EditText input_num, input_purchase_price, input_advise_price; //输入控件
 
     private DBHelper dbHelper;
     private SQLiteDatabase db;
@@ -48,7 +48,7 @@ public class PurchaseActivity extends AppCompatActivity {
         TextView id_view = (TextView)findViewById(R.id.purchase_product_id);
         input_num = (EditText)findViewById(R.id.purchase_product_number);
         input_purchase_price = (EditText)findViewById(R.id.purchase_product_purchase_price);
-        input_sell_price = (EditText)findViewById(R.id.purchase_product_sell_price);
+        input_advise_price = (EditText)findViewById(R.id.purchase_product_sell_price);
         Button save = (Button)findViewById(R.id.purchase_product_save);
         Button back = (Button)findViewById(R.id.purchase_product_back);
 
@@ -67,11 +67,17 @@ public class PurchaseActivity extends AppCompatActivity {
                     Toast.makeText(PurchaseActivity.this, "请输入采购数量!", Toast.LENGTH_SHORT).show();
                 }else if (TextUtils.isEmpty(input_purchase_price.getText()) || input_purchase_price.equals("0")){
                     Toast.makeText(PurchaseActivity.this, "请输入进货单价!", Toast.LENGTH_SHORT).show();
-                }else if (TextUtils.isEmpty(input_sell_price.getText()) || input_sell_price.equals("0")){
+                }else if (TextUtils.isEmpty(input_advise_price.getText()) || input_advise_price.equals("0")){
                     Toast.makeText(PurchaseActivity.this, "请输入建议售价!", Toast.LENGTH_SHORT).show();
                 }else{
-                    db.execSQL("INSERT INTO Product(purchase_id, product_id, num, purchase_price, sell_price, purchase_state) VALUES ("+String.valueOf(purchase_id)+", '"+product_id+"', "+input_num.getText().toString()+", "+
-                            input_purchase_price.getText().toString()+", "+input_sell_price.getText().toString()+", 0)");
+                    db.execSQL("INSERT INTO Product(purchase_id, product_id, product_pic, num, purchase_price, advise_price, sell_price, sell_num) VALUES ("+
+                            String.valueOf(purchase_id)+", "+
+                            product_id+
+                            "', null,  "+
+                            input_num.getText().toString()+", "+
+                            input_purchase_price.getText().toString()+", "+
+                            input_advise_price.getText().toString()+
+                            " null, 0)");
                     Toast.makeText(PurchaseActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
                 }
             }

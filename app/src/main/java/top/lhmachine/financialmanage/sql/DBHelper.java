@@ -11,17 +11,20 @@ import android.widget.Toast;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String CREATE_PURCHASE = "create table Purchase(" +
-            "id integer primary key autoincrement," +
+            "id integer," +
+            "time date, "+
             "num number," +
             "price number)";
 
     private static final String CREATE_PURCHASE_PRODUCT = "create table Product(" +
-            "purchase_id integer" +
-            "product_id varchar(20)" +
-            "num number" +
-            "purchase_price number" +
-            "sell_price number" +
-            "purchase_state number)";
+            "purchase_id integer," +
+            "product_id varchar(20)," +
+            "product_pic text,"+
+            "num number," +
+            "purchase_price number," +
+            "advise_price number," +
+            "sell_price number,"+
+            "sell_num number)";
 
     private Context mContext;
 
