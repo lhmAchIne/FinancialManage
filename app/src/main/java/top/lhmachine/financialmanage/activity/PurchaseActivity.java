@@ -1,5 +1,6 @@
 package top.lhmachine.financialmanage.activity;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -36,7 +37,7 @@ public class PurchaseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_purchase);
 
         //获取产品二维码数据
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         product_id = intent.getStringExtra("product_id");
         purchase_id = intent.getIntExtra("purchase_id", 0);
 
@@ -48,9 +49,11 @@ public class PurchaseActivity extends AppCompatActivity {
         TextView id_view = (TextView)findViewById(R.id.purchase_product_id);
         input_num = (EditText)findViewById(R.id.purchase_product_number);
         input_purchase_price = (EditText)findViewById(R.id.purchase_product_purchase_price);
-        input_advise_price = (EditText)findViewById(R.id.purchase_product_sell_price);
+        input_advise_price = (EditText)findViewById(R.id.purchase_product_advise_price);
         Button save = (Button)findViewById(R.id.purchase_product_save);
         Button back = (Button)findViewById(R.id.purchase_product_back);
+
+        id_view.setText(product_id);
 
         //按钮监听
         back.setOnClickListener(new View.OnClickListener() {
@@ -70,15 +73,17 @@ public class PurchaseActivity extends AppCompatActivity {
                 }else if (TextUtils.isEmpty(input_advise_price.getText()) || input_advise_price.equals("0")){
                     Toast.makeText(PurchaseActivity.this, "请输入建议售价!", Toast.LENGTH_SHORT).show();
                 }else{
-                    db.execSQL("INSERT INTO Product(purchase_id, product_id, product_pic, num, purchase_price, advise_price, sell_price, sell_num) VALUES ("+
-                            String.valueOf(purchase_id)+", "+
-                            product_id+
-                            "', null,  "+
-                            input_num.getText().toString()+", "+
-                            input_purchase_price.getText().toString()+", "+
-                            input_advise_price.getText().toString()+
-                            " null, 0)");
+                    ContentValues values = new ContentValues();
+                    values.put("purchase_id", purchase_id);
+                    values.put("product_id", product_id);
+                    values.put("product_pic", "");
+                    values.put("num", Integer.valueOf(input_num.getText().toString()));
+                    values.put("purchase_price", Integer.valueOf(input_purchase_price.getText().toString()));
+                    values.put("advise_price", Integer.valueOf(input_advise_price.getText().toString()));
+                    db.insert("Product", null, values);
                     Toast.makeText(PurchaseActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }
             }
         });

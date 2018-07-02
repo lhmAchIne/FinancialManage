@@ -2,6 +2,7 @@ package top.lhmachine.financialmanage.activity;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -56,5 +57,16 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.commit();
             }
         });
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 300){
+            if (resultCode == RESULT_OK){
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();  //开始事务
+                fragmentTransaction.replace(R.id.real_content, new PurchaseFragment());
+                fragmentTransaction.commit();
+            }
+
+        }
     }
 }

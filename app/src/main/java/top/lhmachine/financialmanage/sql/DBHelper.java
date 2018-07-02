@@ -12,7 +12,7 @@ import android.widget.Toast;
 public class DBHelper extends SQLiteOpenHelper {
     private static final String CREATE_PURCHASE = "create table Purchase(" +
             "id integer," +
-            "time date, "+
+            "time text, "+
             "num number," +
             "price number)";
 
@@ -22,9 +22,12 @@ public class DBHelper extends SQLiteOpenHelper {
             "product_pic text,"+
             "num number," +
             "purchase_price number," +
-            "advise_price number," +
-            "sell_price number,"+
-            "sell_num number)";
+            "advise_price number)";
+
+    private static final String CREATE_SELL = "create table Sell(" +
+            "product_id varchar(20)," +
+            "sell_price number," +
+            "sell_date text)";
 
     private Context mContext;
 
@@ -37,6 +40,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db){
         db.execSQL(CREATE_PURCHASE);
         db.execSQL(CREATE_PURCHASE_PRODUCT);
+        db.execSQL(CREATE_SELL);
         Toast.makeText(mContext, "创建成功", Toast.LENGTH_SHORT).show();
     }
 

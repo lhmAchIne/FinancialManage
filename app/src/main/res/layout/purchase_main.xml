@@ -29,11 +29,26 @@
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/purchase_menu"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:dividerHeight="2dp"
-        android:divider="#ccc"/>
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/purchase_menu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dividerHeight="2dp"
+            android:divider="#ccc"/>
+
+        <TextView
+            android:id="@+id/no_purchase"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="#000"
+            android:textSize="30sp"
+            android:text="暂无任何进货信息"/>
+
+    </RelativeLayout>
 
 </LinearLayout>

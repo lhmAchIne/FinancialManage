@@ -4,7 +4,9 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.icu.text.LocaleDisplayNames;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -22,6 +25,8 @@ import top.lhmachine.financialmanage.R;
 import top.lhmachine.financialmanage.activity.AddPurchaseActivity;
 import top.lhmachine.financialmanage.sql.DBHelper;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by lhmachine on 2018/6/24.
  * 进货列表
@@ -30,7 +35,9 @@ import top.lhmachine.financialmanage.sql.DBHelper;
 public class PurchaseFragment extends Fragment {
 
     private ListView mListView;
+    private TextView no_purchase;
     private List<HashMap<String, String>> list = new ArrayList<>();
+    private SimpleAdapter adapter;
     private DBHelper dbHelper;
     private SQLiteDatabase db;
 
@@ -45,18 +52,10 @@ public class PurchaseFragment extends Fragment {
         //绑定控件
         Button add_purchase = (Button)purchaseView.findViewById(R.id.bt_add_purchase);
         mListView = (ListView)purchaseView.findViewById(R.id.purchase_menu);
+        no_purchase = (TextView)purchaseView.findViewById(R.id.no_purchase);
 
-        //初始化数据
-        intdata();
-        //显示数据
-        SimpleAdapter adapter = new SimpleAdapter(getActivity(), list, R.layout.purchase_menu_item, new String[]{"id", "time", "num", "price"}, new int[]{R.id.purchase_item_id, R.id.purchase_item_time, R.id.purchase_item_num, R.id.purchase_item_price});
-        mListView.setAdapter(adapter);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(), "查看进货详情", Toast.LENGTH_SHORT).show();
-            }
-        });
+        //初始化和显示数据
+        initdata();
 
         //绑定监听事件
         add_purchase.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +63,7 @@ public class PurchaseFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AddPurchaseActivity.class);
                 intent.putExtra("purchase_id", list.size()+1);
-                startActivity(intent);
+                startActivityForResult(intent, 300);
             }
         });
 
@@ -72,7 +71,7 @@ public class PurchaseFragment extends Fragment {
     }
 
     //初始化数据
-    private void intdata(){
+    private void initdata(){
         Cursor cursor = db.query("Purchase", null, null, null, null, null, null);
         if (cursor.moveToFirst()){
             do{
@@ -83,6 +82,20 @@ public class PurchaseFragment extends Fragment {
                 map.put("price", cursor.getString(3));
                 list.add(map);
             }while(cursor.moveToNext());
+            //显示数据
+            mListView.setVisibility(View.VISIBLE);
+            no_purchase.setVisibility(View.GONE);
+            adapter = new SimpleAdapter(getActivity(), list, R.layout.purchase_menu_item, new String[]{"id", "time", "num", "price"}, new int[]{R.id.purchase_item_id, R.id.purchase_item_time, R.id.purchase_item_num, R.id.purchase_item_price});
+            mListView.setAdapter(adapter);
+            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(getActivity(), "查看进货详情", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else{
+            no_purchase.setVisibility(View.VISIBLE);
+            mListView.setVisibility(View.GONE);
         }
         cursor.close();
     }

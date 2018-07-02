@@ -46,10 +46,10 @@
         <ListView
             android:id="@+id/add_purchase_product_menu"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_height="match_parent"/>
 
         <TextView
+            android:id="@+id/no_product"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="暂无任何商品"
