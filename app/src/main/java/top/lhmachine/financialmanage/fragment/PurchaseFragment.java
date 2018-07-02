@@ -63,7 +63,7 @@ public class PurchaseFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AddPurchaseActivity.class);
                 intent.putExtra("purchase_id", list.size()+1);
-                startActivityForResult(intent, 300);
+                getActivity().startActivityForResult(intent, 300);
             }
         });
 

@@ -91,13 +91,14 @@ public class AddPurchaseActivity extends AppCompatActivity {
                 int num = 0;
                 int price = 0;
                 //查询总数
-                Cursor cursor = db.rawQuery("SELECT count(num), count(purchase_price) FROM Product WHERE purchase_id = "+String.valueOf(purchase_id), null);
+                Cursor cursor = db.rawQuery("SELECT sum(num), sum(purchase_price) FROM Product WHERE purchase_id = "+String.valueOf(purchase_id), null);
                 if (cursor.moveToFirst()){
                     do{
                         num = cursor.getInt(0);
                         price = cursor.getInt(1);
                     }while (cursor.moveToNext());
                 }
+                cursor.close();
                 if(num !=0 && price!=0){
                     //存储到进货表中
                     ContentValues values = new ContentValues();
@@ -113,7 +114,7 @@ public class AddPurchaseActivity extends AppCompatActivity {
                 }else{
                     Toast.makeText(AddPurchaseActivity.this, "请先添加产品信息", Toast.LENGTH_SHORT).show();
                 }
-                cursor.close();
+
 
             }
         });

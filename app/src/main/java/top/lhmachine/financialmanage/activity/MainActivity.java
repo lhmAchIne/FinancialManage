@@ -3,10 +3,15 @@ package top.lhmachine.financialmanage.activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.icu.text.LocaleDisplayNames;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import top.lhmachine.financialmanage.R;
 import top.lhmachine.financialmanage.fragment.MainPageFragment;
@@ -60,13 +65,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 300){
-            if (resultCode == RESULT_OK){
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();  //开始事务
-                fragmentTransaction.replace(R.id.real_content, new PurchaseFragment());
-                fragmentTransaction.commit();
-            }
-
+        Log.d("请求码", String.valueOf(requestCode));
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (scanResult != null) {
+            String result = scanResult.getContents();
+            Log.d("商品条形码", result);
+        }else{
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();  //开始事务
+            fragmentTransaction.replace(R.id.real_content, new PurchaseFragment());
+            fragmentTransaction.commit();
         }
     }
 }
